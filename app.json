@@ -1,0 +1,12 @@
+{
+  "name": "studio",
+  "displayName": "studio",
+  "expo": {
+    "name": "studio",
+    "slug": "studio",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}

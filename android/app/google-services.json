@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "852380250310",
+    "firebase_url": "https://react-native-project-cde46-default-rtdb.firebaseio.com",
+    "project_id": "react-native-project-cde46",
+    "storage_bucket": "react-native-project-cde46.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:852380250310:android:4bb81749730b7d630e67c7",
+        "android_client_info": {
+          "package_name": "com.pickit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "852380250310-pupngfd5nbvppvhr39paei6v2b12t1qs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyMqw4PKNShmHMIHsNbcpX9QADsd81T5Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "852380250310-pupngfd5nbvppvhr39paei6v2b12t1qs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
