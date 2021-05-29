@@ -86,7 +86,7 @@ const Profile = ({navigation}) => {
           // marginTop: 30,
         }}
       >
-        <Text>Name: </Text>
+        <Text>Nam: </Text>
         <Text style={styles.text}>{userFile && userFile.name} </Text>
       </View>
       <View

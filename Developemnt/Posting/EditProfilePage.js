@@ -132,8 +132,6 @@ const pushToFirebase = async() => {
   
   )
 
-
-
 }
 
   
@@ -312,6 +310,8 @@ onPress={pickImage}
             pushToFirebase(),
             updateProfile()
            
+           
+            navigation.navigate("profile")
            }} 
            >
              <Text
