@@ -1,11 +1,23 @@
+import { useIsFocused } from "@react-navigation/core";
 import React, { useContext, useState, useEffect } from "react";
 import { Touchable } from "react-native";
-import { Text, View, Image, StyleSheet } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native";
+import { Text, View, Image, StyleSheet, RefreshControl } from "react-native";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { app } from "../../base";
 import { AuthContext } from "../AuthPath/AuthState";
 
+
+
+const wait = timeout => {
+  return new Promise(resolve => {
+    setTimeout(resolve, timeout);
+  });
+};
+
 const Profile = ({navigation}) => {
+  const isFocused = useIsFocused();
+
   const { current } = useContext(AuthContext);
   const[userFile, setUserFile] = useState([])
   const [name, setName] = useState('')
@@ -38,17 +50,38 @@ const Profile = ({navigation}) => {
     viewProfile()
   },[])
 
+  // React.useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //    alert('Profile Updated successfully!');
+  //   });
+  //   return unsubscribe;
+  // }, [isFocused]);
+
+ 
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+
   return (
+  <SafeAreaView>
+    <ScrollView
+     refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+    >
     <View
       style={{
         marginTop: 80,
         justifyContent: "center",
         alignItems: "center",
-      }}
+      }}     
     >
       {
         userFile.avatar ? <Image
-        source={{uri: userFile && userFile.avatar}}
+        source={{uri: userFile && userFile.avatar1}}
         style={{
           width: 150,
           height: 150,
@@ -86,7 +119,7 @@ const Profile = ({navigation}) => {
           // marginTop: 30,
         }}
       >
-        <Text>Nam: </Text>
+        <Text>Name: </Text>
         <Text style={styles.text}>{userFile && userFile.name} </Text>
       </View>
       <View
@@ -140,7 +173,7 @@ const Profile = ({navigation}) => {
           alignSelf: "flex-start",
           marginLeft: 20,
           marginTop: 20,
-          // marginTop: 30,
+  
         }}
       >
        
@@ -152,7 +185,8 @@ const Profile = ({navigation}) => {
           borderRadius:5,
           justifyContent:"center",
           alignItems:"center",
-          marginTop:10
+          marginTop:10,
+         
         }}
         >
         <Text
@@ -166,11 +200,16 @@ const Profile = ({navigation}) => {
           }}
         >Edit your Profile</Text>
         </TouchableOpacity>
-
+     
       </View>
 
 
-      <View>
+      <View
+      style={{
+        justifyContent:"center",
+        alignItems:"center"
+      }}
+      >
         <Text
         style={{
           width:"100%",
@@ -206,8 +245,12 @@ const Profile = ({navigation}) => {
           }}
         >Sign Out</Text>
         </TouchableOpacity>
+      
       </View>
     </View>
+  
+    </ScrollView>
+  </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({

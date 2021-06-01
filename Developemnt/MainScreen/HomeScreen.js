@@ -9,6 +9,7 @@ import {
   FlatList,
   TouchableWithoutFeedback,
   TouchableOpacity,
+  RefreshControl,
 } from "react-native";
 import moment from "moment";
 import { Avatar } from "react-native-elements";
@@ -19,8 +20,17 @@ import { BackgroundImage } from "react-native-elements/dist/config";
 import { TextInput } from "react-native-gesture-handler";
 import RecentlyBook from "./RecentlyBook";
 
+
+  const wait = timeout => {
+    return new Promise(resolve => {
+      setTimeout(resolve, timeout);
+    });
+  };
+
+
 const HomeScreen = ({ onPress, title, navigation }) => {
   const [data, setData] = useState([]);
+
 
   const getData = async () => {
     await app
@@ -39,9 +49,19 @@ const HomeScreen = ({ onPress, title, navigation }) => {
     getData();
   }, []);
 
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+
   return (
     <SafeAreaView>
-      <ScrollView>
+      <ScrollView
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
         <View
           style={{
             marginTop: 50,
@@ -57,7 +77,7 @@ const HomeScreen = ({ onPress, title, navigation }) => {
             }}
           >
             <BackgroundImage
-              source={require("../../assets/peter.jpg")}
+              source={require("../../assets/studio1.jpeg")}
               style={{
                 width: "100%",
                 height: "100%",
@@ -230,6 +250,7 @@ const HomeScreen = ({ onPress, title, navigation }) => {
                       createdAt={item.createdAt}
                       name={item.name}
                       time={item.time}
+                      item={item}
                     />
                   </View>
 
@@ -240,11 +261,46 @@ const HomeScreen = ({ onPress, title, navigation }) => {
                   >
                     <Image
                       source={{
-                        uri: item.img,
+                        uri: item.coverImage,
                       }}
                       style={styles.img2}
                       // resizeMode="contain"
                     />
+                    <View style={{
+                      flexDirection:"row",
+                      justifyContent: "space-evenly",
+                    }} >
+                      <Image
+                        source={{uri: item.SideImage1}}
+                        style={{
+                          width:100,
+                          height:80,
+                          borderRadius:3,
+                          marginTop: 5,
+
+                        }}
+                      />
+                      <Image
+                        source={{uri: item.SideImage2}}
+                        style={{
+                          width:100,
+                          height:80,
+                          borderRadius:3,
+                          marginTop: 5,
+
+                        }}
+                      />
+                      <Image
+                        source={{uri: item.SideImage3}}
+                        style={{
+                          width:100,
+                          height:80,
+                          borderRadius:3,
+                          marginTop: 5,
+
+                        }}
+                      />
+                    </View>
                     <View
                       style={{
                         flexDirection: "row",
@@ -252,18 +308,18 @@ const HomeScreen = ({ onPress, title, navigation }) => {
                         marginTop: 10,
                       }}
                     >
-                      <View style={styles.inLine}>
-                        <Text style={styles.inText}>Cost</Text>
-                        <Text style={styles.inText2}>{item.cost}</Text>
+                      <View style={{}}>
+                        <Text style={styles.inText}>Product name</Text>
+                        <Text style={styles.inText2}>{item.name}</Text>
                       </View>
 
-                      <View style={styles.inLine}>
-                        <Text style={styles.inText}>comments</Text>
-                        <Text style={styles.inText2}>0</Text>
+                      <View style={{}}>
+                        <Text style={styles.inText}>Location</Text>
+                        <Text style={styles.inText2}>{item.location}</Text>
                       </View>
-                      <View style={styles.inLine}>
-                        <Text style={styles.inText}>Rating</Text>
-                        <Text style={styles.inText2}>4.5</Text>
+                      <View style={{}}>
+                        <Text style={styles.inText}>Cost</Text>
+                        <Text style={styles.inText2}>{item.cost}</Text>
                       </View>
                     </View>
                   </View>

@@ -28,17 +28,29 @@ const EditProfilePage = ({navigation}) => {
     if(user){
          await app.firestore().collection("user24").doc(user.uid)
          .update({
-          name: name !== "" ? name : userFile.name ,
+          name,
           first: name.charAt(0),
           businessName, 
           businessLocation,
           businessDesc,
           avatar: image,
+         })
+    }
+  }
+
+  const updateImage = async() => {
+    const user = app.auth().currentUser
+    if(user){
+         await app.firestore().collection("user24").doc(user.uid)
+         .update({
           avatar1: pushImage,
          })
-
-        //  navigation.pop()
     }
+  }
+
+
+  const goBack = () => {
+    navigation.pop()
   }
 
   const setMyImages = async() => {
@@ -167,54 +179,92 @@ onPress={pickImage}
 </TouchableOpacity>
        
 
+        {
+          image ?  <Image  
+          source={{uri: image}}
+          resizeMode="contain"
+          style={{
+            width: 300,
+            height: 250,
+            borderRadius:5,
+            // marginTop:10, backgroundColor:"lightblue"
+          }}
+
+        />: null
+            }
+            
+            
+            {  image ? 
+              <View
+              style={{
+                justifyContent:"space-between",
+                flexDirection:"row",
+              }}
+              >
+
+
+                  <TouchableOpacity
+                  onPress={()=>{
+                    setImage(null)
+                  }}
+                  style={{
+                    width:120,
+                    justifyContent:"center",
+                    alignItems:"center",
+                    backgroundColor:"lightblue",
+                    height:50,
+                    borderRadius:4
+                  }}
+                  >
+                  <Text
+                  style={{
+                    color:"white",
+                    fontSize:16,
+                    fontWeight:"bold",
+                    textTransform:"uppercase"
+                  }}
+                  >Reset</Text>
+                  </TouchableOpacity>
+
 {
-  image ?  <Image  
-  source={{uri: image}}
-  resizeMode="contain"
-  style={{
-    width: 300,
-    height: 250,
-    borderRadius:5,
-    // marginTop:10, backgroundColor:"lightblue"
+  uploading ? <ActivityIndicator 
+  color="blue" size="large"
+/> :
+   <TouchableOpacity
+  onPress={()=>{
+    pushToFirebase(),
+    updateImage()
   }}
+  style={{
+    width:120,
+    height:100,
+    justifyContent:"center",
+    alignItems:"center",
+    backgroundColor:"#651E32",
+    height:50,
+    borderRadius:4
+  }}
+  >
+  <Text
+  style={{
+    color:"white",
+    fontSize:16,
+    fontWeight:"bold",
+    textTransform:"uppercase"
+  }}
+  >Upload Image</Text>
+  </TouchableOpacity>
 
-/>: null
 }
- 
- 
-{  image ? 
- <View> 
-    <TouchableOpacity
-    onPress={()=>{
-      setImage(null)
-    }}
-    style={{
-      width:300,
-      justifyContent:"center",
-      alignItems:"center",
-      backgroundColor:"#651E32",
-      height:30,
-      borderRadius:4
-    }}
-    >
-     <Text
-     style={{
-       color:"white",
-       fontSize:16,
-       fontWeight:"bold",
-       textTransform:"uppercase"
+                 
+                </View> : null
+              }
+                </View>
 
-     }}
-     >Reset</Text>
-    </TouchableOpacity>
-   </View> : null
-}
-</View>
-
-<View>
-  
-  <View>
-  <TextInput
+                <View>
+                  
+                  <View>
+                  <TextInput
                     placeholder="User Preferred Name"
                     style={{
                       marginTop:5,
@@ -229,11 +279,11 @@ onPress={pickImage}
                     value={name}
                     onChangeText={setName}
                   />
-  </View>
+                </View>
 
   
-  <View>
-  <TextInput
+                  <View>
+                  <TextInput
                     placeholder="Business Name"
                     style={{
                       marginTop:5,
@@ -248,11 +298,11 @@ onPress={pickImage}
                     value={businessName}
                     onChangeText={setBusinessName}
                   />
-  </View>
+                </View>
 
   
-  <View>
-  <TextInput
+                <View>
+                  <TextInput
                     placeholder="Business Location"
                     style={{
                       marginTop:5,
@@ -267,11 +317,11 @@ onPress={pickImage}
                     value={businessLocation}
                     onChangeText={setBusinessLocation}
                   />
-  </View>
+              </View>
 
   
-  <View>
-  <TextInput
+              <View>
+              <TextInput
                     placeholder="Business Description"
                     style={{
                       marginTop:5,
@@ -286,15 +336,13 @@ onPress={pickImage}
                     value={businessDesc}
                     onChangeText={setBusinessDesc}
                   />
-  </View>
+              </View>
 
 
-</View>
+            </View>
     
 
-      <View style={{margin:30}} >
-         {
-           uploading ?  <ActivityIndicator size="large" color="red" /> : 
+             <View style={{margin:30}} >
            
            <TouchableOpacity
 
@@ -307,11 +355,9 @@ onPress={pickImage}
            }}
 
            onPress={()=>{
-            pushToFirebase(),
-            updateProfile()
-           
-           
-            navigation.navigate("profile")
+            
+            updateProfile()                      
+            navigation.pop()
            }} 
            >
              <Text
@@ -326,8 +372,7 @@ onPress={pickImage}
              Upload Profile
              </Text>
            </TouchableOpacity>
-         }
-       
+                
        </View>
     </View>
    

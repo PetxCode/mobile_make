@@ -4,14 +4,15 @@ import moment from "moment";
 
 import { app } from "../../base";
 import { ScrollView } from "react-native-gesture-handler";
+import { fonts } from "react-native-elements/dist/config";
 
-const ViewCreatedBy = ({ createdBy, createdAt, name, time }) => {
+const ViewCreatedBy = ({ createdBy, createdAt, name, time, item }) => {
   const [data, setData] = useState([]);
 
   const getData = async () => {
     await app
       .firestore()
-      .collection("user24")
+      .collection("user24")      
       .doc(createdBy)
       .get()
       .then((doc) => {
@@ -32,21 +33,51 @@ const ViewCreatedBy = ({ createdBy, createdAt, name, time }) => {
           marginTop: 0,
         }}
       >
-        <Image source={{ uri: data && data.avatar }} style={styles.img} />
+        {
+          data ? 
+          <Image source={{ uri: data && data.avatar1 }} style={styles.img} /> : 
+          <View
+          style={{
+            width: 70,
+            height: 70,
+            borderRadius: 100,
+            borderWidth: 5,
+            borderColor: "#651E32",
+            justifyContent:"center",
+            alignItems:"center"
+          }} 
+          >
+                <Text>{ data && data.firstLetter }</Text>
+           </View> 
+        }
 
         <View style={{ marginLeft: 10 }}>
           <Text style={{ fontSize: 17, fontWeight: "bold" }}>
-            {data && data.name}
+            {data && data.businessName}
           </Text>
+         
           <Text
+          style={{
+            fontWeight:"bold",
+            fontSize:11
+          }}
+          >contact email: {data && data.email} </Text>
+           <Text
             style={{
               fontWeight: "bold",
               fontSize: 12,
             }}
           >
-            {moment({ time }).fromNow()}{" "}
+            {moment(createdAt.toDate()).fromNow()}
           </Text>
-          <Text>Item: {name} </Text>
+          <Text
+          style={{
+            fontWeight:"bold",
+            fontSize:11,
+            color: "#651E32"
+          }}
+          >Category: {item.language} </Text>
+     
         </View>
       </View>
     </ScrollView>
