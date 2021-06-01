@@ -20,21 +20,21 @@ const RecentlyBook = ({ title, img, onPress }) => {
       <ScrollView horizontal={true} style={{ flexDirection: "row" }}>
         <ImageProps
           title="Backdrop studio"
-          img={require("../../assets/peter.jpg")}
+          img={require("../../assets/studio1.jpeg")}
         />
         <ImageProps
           title="Sand studio"
-          img={require("../../assets/ndidd.jpg")}
+          img={require("../../assets/std.jpg")}
         />
         <ImageProps
           title="Sand studio"
-          img={require("../../assets/peter.jpg")}
+          img={require("../../assets/r2.jpg")}
         />
-        <ImageProps title="Camera" img={require("../../assets/3.jpg")} />
+        <ImageProps title="Camera" img={require("../../assets/r4.jpg")} />
 
         <ImageProps
           title="Sand studio"
-          img={require("../../assets/ndidd.jpg")}
+          img={require("../../assets/r6.jpg")}
         />
       </ScrollView>
     </View>
