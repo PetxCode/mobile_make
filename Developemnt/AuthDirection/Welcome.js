@@ -43,7 +43,7 @@ const Welcome = ({ navigation }) => {
             textTransform: "uppercase",
           }}
         >
-          Click Here to Register
+          Click Here to Become a Member
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -68,7 +68,7 @@ const Welcome = ({ navigation }) => {
             textTransform: "uppercase",
           }}
         >
-          Click Here to Start
+          Browse Listed Space
         </Text>
       </TouchableOpacity>
     </View>

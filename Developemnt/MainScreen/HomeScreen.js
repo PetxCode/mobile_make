@@ -301,6 +301,8 @@ const HomeScreen = ({ onPress, title, navigation }) => {
                         }}
                       />
                     </View>
+                    
+                    
                     <View
                       style={{
                         flexDirection: "row",
@@ -322,7 +324,8 @@ const HomeScreen = ({ onPress, title, navigation }) => {
                         <Text style={styles.inText2}>{item.cost}</Text>
                       </View>
                     </View>
-                  </View>
+                 
+                  </View>               
                 </View>
               </TouchableWithoutFeedback>
             )}

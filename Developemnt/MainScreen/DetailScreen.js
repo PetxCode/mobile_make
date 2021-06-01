@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect, useContext} from "react";
 import {
   Text,
   View,
@@ -7,41 +7,127 @@ import {
   FlatList,
   ScrollView,
   SafeAreaView,
+  TextInput
 } from "react-native";
+import { colors } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { Button, Paragraph, TextInput } from "react-native-paper";
+import { Button, Paragraph,  } from "react-native-paper";
+import { app } from "../../base";
+import { AuthContext } from "../AuthPath/AuthState";
+import firebase from "firebase"
+import moment from "moment"
+import CommentPostImage from "./CommentPostImage";
+import {Picker} from '@react-native-picker/picker';
+
+
+
+
+
+
 
 const DetailScreen = ({ route }) => {
+  const {current} = useContext(AuthContext)
   const data = route.params;
+const [comment, setComment] = useState("")
+const [feedBack, setFeedBack] = useState([])
+const [days, setDays] = useState("");
+
+const makeFeedBack = async() => {
+  const resData = app.auth().currentUser
+
+  if(resData){
+    await app.firestore().collection("studio").doc(data.id).collection("feedback").doc().set({
+      commentBy: resData.uid,
+      date: firebase.firestore.FieldValue.serverTimestamp(),
+      comment,
+    })
+    setComment("")
+  }
+}
+
+const viewFeedBack = async () => {
+  await app.firestore().collection("studio")
+  .doc(data.id).collection("feedback")
+  .orderBy("date", "desc")
+  .onSnapshot(snapshot => {
+    const r =[]
+    snapshot.forEach(doc => {
+      r.push({...doc.data(), id: doc.id})
+    })
+    setFeedBack(r)
+  })
+}
+
+
+useEffect(()=>{
+  viewFeedBack()
+}, [])
+
   return (
     <SafeAreaView>
       <ScrollView>
-        <Text>Detail Page</Text>
-
         <View
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
-            alignItems: "center",
+            // alignItems: "center",
             marginRight: 20,
             marginLeft: 20,
           }}
         >
+        
           <Text style={styles.text}>{data.name}</Text>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => {
               console.log("Ready to be Booked");
             }}
           >
             <Text style={styles.text2}>Book</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         <Image
-          source={require("../../assets/peter.jpg")}
-          source={{ uri: data.img }}
+          source={{ uri: data.coverImage }}
           style={styles.img}
         />
+
+      <View style={{
+                      flexDirection:"row",
+                      justifyContent: "space-evenly",
+                    }} >
+                      <Image
+                        source={{uri: data.SideImage1}}
+                        style={{
+                          width:100,
+                          height:80,
+                          borderRadius:3,
+                          marginTop: 5,
+
+                        }}
+                      />
+                      <Image
+                        source={{uri: data.SideImage2}}
+                        style={{
+                          width:100,
+                          height:80,
+                          borderRadius:3,
+                          marginTop: 5,
+
+                        }}
+                      />
+                      <Image
+                        source={{uri: data.SideImage3}}
+                        style={{
+                          width:100,
+                          height:80,
+                          borderRadius:3,
+                          marginTop: 5,
+
+                        }}
+                      />
+                    </View>
+                    
+        
         <Text
           style={{
             marginLeft: 30,
@@ -52,7 +138,7 @@ const DetailScreen = ({ route }) => {
           }}
         >
           {" "}
-          Details:{" "}
+          Description:{" "}
         </Text>
         <Paragraph style={styles.para}>{data.desc}</Paragraph>
 
@@ -64,37 +150,136 @@ const DetailScreen = ({ route }) => {
           }}
         >
           <View style={styles.inLine}>
-            <Text style={styles.inText}>Cost</Text>
+            <Text style={styles.inText}>Cost/day</Text>
             <Text style={styles.inText2}>#{data.cost}</Text>
           </View>
 
           <View style={styles.inLine}>
-            <Text style={styles.inText}>comments</Text>
-            <Text style={styles.inText2}>0</Text>
+            <Text style={styles.inText}>Feedback</Text>
+            <Text style={styles.inText2}>{feedBack.length}</Text>
           </View>
           <View style={styles.inLine}>
             <Text style={styles.inText}>Rating</Text>
             <Text style={styles.inText2}>4.5</Text>
           </View>
         </View>
-        <View style={{ flexDirection: "row", margin: 20 }}>
-          <Text>Do here Button heer!</Text>
-        </View>
-        <View>
-          <TextInput
+
+        <View style={{ flexDirection: "column", margin: 20, justifyContent:"center", alignItems:"center" }}>
+          <View
+           style={{
+            marginTop:10,  
+            width:300,
+            height:40,
+            // marginVertical:10,
+            borderWidth:1,
+            borderRadius: 3,
+            paddingHorizontal:10,
+            borderColor: "#651d32",
+            justifyContent:"center",
+            // alignItems: "center"
+            color: "black",
+            marginLeft: 30,
+            marginRight: 30,
+            marginiBottom:30
+             }}
+          >
+                <Picker
+                    selectedValue={days}
+                    style={{ height: 50, 
+                      width: 290,
+                      
+                    }}
+                    onValueChange={(itemValue, itemIndex) => setDays(itemValue)}>
+                    <Picker.Item label="How long would you want to hire this Product" value="1"
+                    
+                    />
+                    <Picker.Item label="1 day" value="1" />
+                    <Picker.Item label="2 days" value="2" />                  
+                    <Picker.Item label="3 days" value="3" />                  
+                    <Picker.Item label="4 days" value="4" />                  
+                    <Picker.Item label="5 days" value="5" />                  
+               </Picker>
+          </View>
+                  <View
+                  style={{
+                    justifyContent:'center',
+                    alignItems:"center"
+                  }}
+                  >
+                    <Text>Your Charge</Text>
+                    <Text>{
+                      days !== "" ? <Text> {data.cost * parseInt(days)} </Text> : null
+                      }</Text>
+                      <View>
+                        {
+                          days !== "" ? (
+                            <TouchableOpacity
+                              style={{
+                                width:100,
+                                height:30,
+                                backgroundColor:"#651d32",
+                                justifyContent:"center",
+                                alignItems:"center",
+                                borderRadius:5
+
+                              }}
+                            >
+                              <Text
+                              style={{
+                                color:"white",
+                                textTransform:"uppercase",
+                                fontWeight:"bold"
+                              }}
+                              >Pay</Text>
+                            </TouchableOpacity>
+                          ): null
+                        }
+                      </View>
+                  </View>
+
+          <Text
+          style={{
+            marginTop:40
+          }}
+          >We will love to Have your Feedback, Please sign in to do so! </Text>
+        
+      <View
+        style={{
+          width:300,
+          justifyContent:"center",
+          alignItems:"center"
+        }}
+        >
+        <TextInput
+            placeholder="What's your FeedBack?"
             style={{
-              margin: 10,
+              width:300,
+              height:40,
+              marginVertical:10,
+              borderWidth:1,
+              borderRadius: 3,
+              paddingHorizontal:10,
+              borderColor: "#651d32",
+              justifyContent:"center"
             }}
-            placeholder="Comment"
+            value={comment}
+            onChangeText={setComment}
           />
-          <TouchableOpacity
+
+        {
+          current ? (
+            <TouchableOpacity
             style={{
-              backgroundColor: "lightgray",
+              backgroundColor: "#651E32",
               width: 300,
               height: 40,
               borderRadius: 5,
               justifyContent: "center",
               alignSelf: "center",
+            }}
+            onPress={()=>{
+              makeFeedBack()
+              console.log("Tapped")
             }}
           >
             <Text
@@ -103,14 +288,85 @@ const DetailScreen = ({ route }) => {
                 alignSelf: "center",
                 textTransform: "uppercase",
                 fontSize: 16,
+                fontSize: 13,
+                fontWeight:"bold",
+                textAlign: "center",
+                color:"white"
               }}
             >
               {" "}
               post comment{" "}
             </Text>
           </TouchableOpacity>
-          <View style={{ marginTop: 40 }} />
-        </View>
+        
+          ):(
+            <TouchableOpacity
+            style={{
+              backgroundColor: "#651E32",
+              width: 300,
+              height: 40,
+              borderRadius: 5,
+              justifyContent: "center",
+              alignSelf: "center",
+              color: "white"
+            }}
+          >
+            <Text
+              style={{
+                justifyContent: "center",
+                alignSelf: "center",
+                textTransform: "uppercase",
+                fontSize: 13,
+                fontWeight:"bold",
+                textAlign: "center",
+                color: "whi"
+              }}
+            >
+      
+              Become a Memeber to post comment
+            </Text>
+          </TouchableOpacity>
+        
+          )
+        }  
+          
+          <View 
+          style={{ 
+            marginTop: 20,
+             }} />
+                 
+        </View>       
+       </View>  
+
+      <View>
+    
+      <View>
+        <FlatList 
+        data={feedBack}
+        keyExtractor={(item) => item.id}
+          renderItem={({item}) => (
+              <View
+              style={{
+                flexDirection:"row", margin:5, alignItems:"center"
+              }}
+              > 
+                <CommentPostImage item={item} />
+                <Text
+                style={{
+                  marginLeft:10,
+                  backgroundColor:"#ebced6",
+                  width:245,
+                  height:50,
+                  borderRadius:5,
+                  padding:5
+                }}
+                >{item.comment}</Text>
+                </View>
+          )}
+        />
+      </View>
+      </View>
+
       </ScrollView>
     </SafeAreaView>
   );
@@ -148,7 +404,7 @@ const styles = StyleSheet.create({
     // alignSelf: "center",
     alignItems: "center",
     marginTop: 50,
-    backgroundColor: "tomato",
+    backgroundColor: "#651E32",
     padding: 10,
     paddingBottom: 0,
     paddingTop: 0,
@@ -156,8 +412,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   para: {
-    margin: 20,
+    margin: 10,
     fontSize: 14,
+    marginLeft: 35,
+    // marginTop: 10,
   },
   inLine: {
     alignItems: "center",

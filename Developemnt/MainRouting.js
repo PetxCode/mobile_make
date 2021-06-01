@@ -49,7 +49,7 @@ const MainRouting = ({ onPress }) => {
       />
       {current ? (
         <Tab.Screen
-          name="Make Post"
+          name="List your Space"
           component={Post}
           options={{
             tabBarIcon: ({ color, size }) => (
@@ -63,7 +63,7 @@ const MainRouting = ({ onPress }) => {
         />
       ) : (
         <Tab.Screen
-          name="Sign Up"
+          name="Sign Up to become a Member"
           component={Login_Screen}
           options={{
             tabBarIcon: ({ color, size }) => (
