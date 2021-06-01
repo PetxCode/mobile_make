@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Image } from "react-native";
 // import {  } from "react-native-gesture-handler";
 
 const TabDesign = ({ onPress }) => {
@@ -19,7 +20,16 @@ const TabDesign = ({ onPress }) => {
           alignItems: "center",
         }}
       >
-        <MaterialCommunityIcons name="home" color={"black"} size={40} />
+        {/* <MaterialCommunityIcons name="home" color={"white"} size={40} /> */}
+        <Image
+          source={require("../../assets/logo11.png")}
+          resizeMode="cover"
+          style={{
+            width:60,
+            height:60,
+            borderRadius:30
+          }}
+        />
       </View>
     </TouchableOpacity>
   );

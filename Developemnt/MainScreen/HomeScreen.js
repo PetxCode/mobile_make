@@ -172,9 +172,11 @@ const HomeScreen = ({ onPress, title, navigation }) => {
                   fontSize: 13,
                   fontWeight: "bold",
                   textTransform: "uppercase",
+                  padding:10,
+                  textAlign:"center"
                 }}
               >
-                Cameras
+                 Studio Equipements
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -197,32 +199,10 @@ const HomeScreen = ({ onPress, title, navigation }) => {
                   textTransform: "uppercase",
                 }}
               >
-                Toolings
+                Studio Space
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                backgroundColor: "white",
-                width: 100,
-                height: 35,
-                borderRadius: 2,
-                justifyContent: "center",
-                alignItems: "center",
-                marginBottom: 10,
-              }}
-              onPress={() => {}}
-            >
-              <Text
-                style={{
-                  color: "#651E32",
-                  fontSize: 13,
-                  fontWeight: "bold",
-                  textTransform: "uppercase",
-                }}
-              >
-                Studios
-              </Text>
-            </TouchableOpacity>
+            
           </View>
 
           <FlatList
