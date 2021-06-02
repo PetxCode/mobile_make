@@ -6,6 +6,7 @@ import { NavigationContainer, TabActions } from "@react-navigation/native";
 
 import DetailScreen from "./DetailScreen";
 import HomeScreen from "./HomeScreen";
+import PaymentPlan from "./Payment";
 
 const Stack = createStackNavigator();
 const HomeRoute = () => {
@@ -17,6 +18,7 @@ const HomeRoute = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen name="Detailed" component={DetailScreen} />
+      <Stack.Screen name="payment" component={PaymentPlan} />
     </Stack.Navigator>
   );
 };

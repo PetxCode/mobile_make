@@ -143,8 +143,8 @@ const HomeScreen = ({ onPress, title, navigation }) => {
         <RecentlyBook />
         <View
           style={{
-            marginTop: 50,
-            marginBottom: 30,
+            marginTop: 30,
+            marginBottom: 10,
           }}
         >
           <View

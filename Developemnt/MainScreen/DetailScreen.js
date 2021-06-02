@@ -18,6 +18,8 @@ import firebase from "firebase"
 import moment from "moment"
 import CommentPostImage from "./CommentPostImage";
 import {Picker} from '@react-native-picker/picker';
+import PaystackWebView from 'react-native-paystack-webview';
+import PaymentPlan from './Payment'
 
 
 
@@ -25,7 +27,7 @@ import {Picker} from '@react-native-picker/picker';
 
 
 
-const DetailScreen = ({ route }) => {
+const DetailScreen = ({ route, navigation }) => {
   const {current} = useContext(AuthContext)
   const data = route.params;
 const [comment, setComment] = useState("")
@@ -206,9 +208,14 @@ useEffect(()=>{
                     alignItems:"center"
                   }}
                   >
-                    <Text>Your Charge</Text>
-                    <Text>{
-                      days !== "" ? <Text> {data.cost * parseInt(days)} </Text> : null
+                    <Text>Your Total Charges will be: </Text>
+                    <Text
+                    style={{
+                      fontWeight:"bold",
+
+                    }}
+                    >{
+                      days !== "" ? <Text>#{data.cost * parseInt(days)} </Text> : null
                       }</Text>
                       <View>
                         {
@@ -223,6 +230,11 @@ useEffect(()=>{
                                 borderRadius:5
 
                               }}
+                              onPress={()=>{
+                                navigation.navigate("payment",  
+                                 {bestData: data, counter: days}
+                                 )
+                              }}
                             >
                               <Text
                               style={{
@@ -232,11 +244,14 @@ useEffect(()=>{
                               }}
                               >Pay</Text>
                             </TouchableOpacity>
+                            
                           ): null
                         }
                       </View>
+                      
                   </View>
 
+      
           <Text
           style={{
             marginTop:40
@@ -311,6 +326,7 @@ useEffect(()=>{
               color: "white"
             }}
           >
+            
             <Text
               style={{
                 justifyContent: "center",
@@ -319,7 +335,7 @@ useEffect(()=>{
                 fontSize: 13,
                 fontWeight:"bold",
                 textAlign: "center",
-                color: "whi"
+                color: "white"
               }}
             >
       
@@ -329,12 +345,13 @@ useEffect(()=>{
         
           )
         }  
+        
           
           <View 
           style={{ 
             marginTop: 20,
              }} />
-                 
+                
         </View>       
        </View>  
 
@@ -366,7 +383,13 @@ useEffect(()=>{
         />
       </View>
       </View>
-
+     
+        <Text
+        style={{
+          marginBottom:200,
+          color: "red"
+        }}
+        >Ready</Text>
       </ScrollView>
     </SafeAreaView>
   );
